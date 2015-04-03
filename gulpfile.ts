@@ -9,6 +9,7 @@ import through = require("through2");
 import tslint = require("gulp-tslint");
 import typescript = require("gulp-typescript");
 
+// Tasks
 enum Task {
     bundle,
     clean,
@@ -19,6 +20,22 @@ enum Task {
     test
 }
 
+// Directories
+var all = dir("**");
+var build = dir("_build");
+var root = dir(path.dirname(__filename));
+var src = dir("src");
+var test = dir("test");
+var typings = dir("typings");
+
+// Extensions
+var js = ext.bind(null, "js");
+var ts = ext.bind(null, "ts");
+
+// Tasks
+var gulpfile = "gulpfile";
+var match = "*";
+
 register(Task.bundle, [Task.copy], () => {
     dts.bundle({
         main: "index.d.ts",
@@ -28,18 +45,18 @@ register(Task.bundle, [Task.copy], () => {
 });
 
 register(Task.clean, [], (callback) => {
-    del("_build", callback);
+    del(root(build()), callback);
 });
 
 register(Task.copy, [Task.scripts], () => {
-    return gulp.src(path.join("_build", "src", "**", "*"))
-        .pipe(gulp.dest("."));
+    return gulp.src(root(build(src(all("*")))))
+        .pipe(gulp.dest(root()));
 });
 
 register(Task.lint, [], () => {
     return gulp.src([
-            "gulpfile.ts",
-            path.join("{src,test}", "**", "*.ts")
+            root(ts(gulpfile)),
+            root(union(src(), test()), all(ts(match)))
         ])
         .pipe(tslint())
         .pipe(tslint.report("verbose", {
@@ -48,7 +65,7 @@ register(Task.lint, [], () => {
 });
 
 register(Task.scripts, [Task.clean], () => {
-    var compiler = gulp.src(path.join("{src,test,typings}", "**", "*.ts"))
+    var compiler = gulp.src(root(union(src(), test(), typings()), all(ts(match))))
         .pipe(typescript({
             declarationFiles: true,
             module: "commonjs",
@@ -72,17 +89,17 @@ register(Task.scripts, [Task.clean], () => {
         });
         source.pipe(results, {end: false});
     });
-    return results.pipe(gulp.dest("_build"));
+    return results.pipe(gulp.dest(build()));
 });
 
 register(Task.spec, [Task.scripts], (callback) => {
-    gulp.src(path.join("_build", "src", "**", "*.js"))
+    gulp.src(root(build(src(all(js(match))))))
         .pipe(istanbul({
             includeUntested: true
         }))
         .pipe(istanbul.hookRequire())
         .on("finish", () => {
-            gulp.src(path.join("_build", "test", "**", "*.js"))
+            gulp.src(root(build(test(all(js(match))))))
                 .pipe(mocha())
                 .pipe(istanbul.writeReports())
                 .on("finish", () => {
@@ -107,4 +124,16 @@ function name(task: Task): string {
 
 function register(task: Task, deps: Task[], callback?: gulp.ITaskCallback): void {
     gulp.task(name(task), deps.map(name), callback);
+}
+
+function dir(prefix: string, join: (...parts: string[]) => string = path.join): (...parts: string[]) => string {
+    return join.bind(path, prefix);
+}
+
+function union(...parts: string[]): string {
+    return `{${parts.join(",")}}`;
+}
+
+function ext(extension: string, filename: string): string {
+    return `${filename}.${extension}`;
 }
