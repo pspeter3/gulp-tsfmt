@@ -1,0 +1,53 @@
+{
+  "name": "gulp-tsfmt",
+  "version": "0.0.1",
+  "description": "A gulp plugin for formatting TypeScript files",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "package.json"
+  ],
+  "scripts": {
+    "bundle": "gulp bundle",
+    "coverage": "cat ./coverage/lcov.info | coveralls",
+    "test": "gulp test",
+    "typings": "tsd reinstall && tsd rebundle"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pspeter3/gulp-tsfmt.git"
+  },
+  "keywords": [
+    "gulpplugin",
+    "typescript",
+    "format"
+  ],
+  "author": "Phips Peter",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pspeter3/gulp-tsfmt/issues"
+  },
+  "homepage": "https://github.com/pspeter3/gulp-tsfmt",
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "coveralls": "^2.11.2",
+    "del": "^1.1.1",
+    "dts-bundle": "^0.2.0",
+    "gulp": "^3.8.11",
+    "gulp-istanbul": "^0.7.0",
+    "gulp-mocha": "^2.0.1",
+    "gulp-tslint": "^1.4.4",
+    "gulp-typescript": "^2.5.0",
+    "sinon": "^1.14.1",
+    "tsd": "^0.6.0-beta.5",
+    "typescript": "^1.4.1",
+    "typescript-require": "https://github.com/pspeter3/typescript-require/releases/download/v1.0.6/typescript-require-1.0.6.tgz"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.4",
+    "through2": "^0.6.3",
+    "typescript": "^1.4.1"
+  }
+}

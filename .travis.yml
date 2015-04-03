@@ -1,0 +1,12 @@
+after_success:
+- npm run coverage
+before_script:
+- npm run typings
+cache:
+  directories:
+  - node_modules
+  - typings
+language: node_js
+node_js:
+- '0.12'
+sudo: false

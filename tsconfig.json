@@ -1,0 +1,42 @@
+{
+    "version": "1.4.1",
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "declaration": false,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "noLib": false
+    },
+    "compileOnSave": false,
+    "filesGlob": [
+        "./**/*.ts",
+        "!./node_modules/**/*.ts"
+    ],
+    "files": [
+        "./_build/src/index.d.ts",
+        "./_build/test/index_spec.d.ts",
+        "./gulpfile.ts",
+        "./src/index.ts",
+        "./test/index_spec.ts",
+        "./typings/chai/chai.d.ts",
+        "./typings/chalk/chalk.d.ts",
+        "./typings/del/del.d.ts",
+        "./typings/dts-bundle/dts-bundle.d.ts",
+        "./typings/glob/glob.d.ts",
+        "./typings/gulp-istanbul/gulp-istanbul.d.ts",
+        "./typings/gulp-mocha/gulp-mocha.d.ts",
+        "./typings/gulp-tslint/gulp-tslint.d.ts",
+        "./typings/gulp-typescript/gulp-typescript.d.ts",
+        "./typings/gulp-util/gulp-util.d.ts",
+        "./typings/gulp/gulp.d.ts",
+        "./typings/minimatch/minimatch.d.ts",
+        "./typings/mocha/mocha.d.ts",
+        "./typings/node/node.d.ts",
+        "./typings/sinon/sinon.d.ts",
+        "./typings/through2/through2.d.ts",
+        "./typings/tsd.d.ts",
+        "./typings/typescript/typescript.d.ts",
+        "./typings/vinyl/vinyl.d.ts"
+    ]
+}
