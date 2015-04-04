@@ -11,11 +11,10 @@
     "compileOnSave": false,
     "filesGlob": [
         "./**/*.ts",
+        "!./_build/**/*.ts",
         "!./node_modules/**/*.ts"
     ],
     "files": [
-        "./_build/src/index.d.ts",
-        "./_build/test/index_spec.d.ts",
         "./gulpfile.ts",
         "./src/index.ts",
         "./test/index_spec.ts",
