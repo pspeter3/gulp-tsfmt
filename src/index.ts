@@ -5,7 +5,7 @@ import ts = require("typescript");
 
 var PLUGIN_NAME = "gulp-tsfmt";
 
-var DEFAULTS: {options?: ts.FormatCodeOptions; target?: ts.ScriptTarget} = {
+var DEFAULTS: {options?: ts.FormatCodeOptions; target?: string} = {
     options: {
         IndentSize: 4,
         TabSize: 4,
@@ -20,7 +20,7 @@ var DEFAULTS: {options?: ts.FormatCodeOptions; target?: ts.ScriptTarget} = {
         PlaceOpenBraceOnNewLineForFunctions: false,
         PlaceOpenBraceOnNewLineForControlBlocks: false
     },
-    target: ts.ScriptTarget.ES5
+    target: "ES5"
 };
 
 class Transformer {
@@ -61,11 +61,57 @@ class Transformer {
     }
 }
 
-function format(params?: {options?: ts.FormatCodeOptions; target?: ts.ScriptTarget}): NodeJS.ReadWriteStream {
+function formatOptions(options: {
+    IndentSize?: number;
+    TabSize?: number;
+    NewLineCharacter?: string;
+    ConvertTabsToSpaces?: boolean;
+    InsertSpaceAfterCommaDelimiter?: boolean;
+    InsertSpaceAfterSemicolonInForStatements?: boolean;
+    InsertSpaceBeforeAndAfterBinaryOperators?: boolean;
+    InsertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+    InsertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+    InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+    PlaceOpenBraceOnNewLineForFunctions?: boolean;
+    PlaceOpenBraceOnNewLineForControlBlocks?: boolean;
+}): ts.FormatCodeOptions {
+    var defaults: any = DEFAULTS.options;
+    var params: any = options;
+    var result: any = {};
+    Object.keys(defaults).forEach((key) => {
+        result[key] = params.hasOwnProperty(key) ? params[key] : defaults[key];
+    });
+    return result;
+}
+
+function scriptTarget(target: string): ts.ScriptTarget {
+    if (!ts.ScriptTarget.hasOwnProperty(target)) {
+        throw new gutil.PluginError(PLUGIN_NAME, `${target} is not a valid script target`);
+    }
+    return (<{[key: string]: ts.ScriptTarget}>(<any>ts).ScriptTarget)[target];
+}
+
+function format(params?: {
+    options?: {
+        IndentSize?: number;
+        TabSize?: number;
+        NewLineCharacter?: string;
+        ConvertTabsToSpaces?: boolean;
+        InsertSpaceAfterCommaDelimiter?: boolean;
+        InsertSpaceAfterSemicolonInForStatements?: boolean;
+        InsertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        InsertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        InsertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        PlaceOpenBraceOnNewLineForFunctions?: boolean;
+        PlaceOpenBraceOnNewLineForControlBlocks?: boolean;
+    };
+    target?: string
+}): NodeJS.ReadWriteStream {
     params = params || DEFAULTS;
     var options = params.options || DEFAULTS.options;
     var target = params.target || DEFAULTS.target;
-    var transformer = new Transformer(options, target);
+    var transformer = new Transformer(formatOptions(options), scriptTarget(target));
     return through.obj(function (file: VinylFile, encoding: string, callback: () => void) {
         var stream = <NodeJS.ReadWriteStream>this;
         if (file.isStream()) {
@@ -80,9 +126,7 @@ function format(params?: {options?: ts.FormatCodeOptions; target?: ts.ScriptTarg
 }
 
 interface Formatter {
-    /* tslint:disable */
     RulesProvider: { new(): RulesProvider };
-    /* tslint:enable */
     formatDocument(source: ts.SourceFile, rulesProvider: RulesProvider, options: ts.FormatCodeOptions): ts.TextChange[];
 }
 

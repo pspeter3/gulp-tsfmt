@@ -2,7 +2,6 @@ import chai = require("chai");
 import gutil = require("gulp-util");
 import stream = require("stream");
 import tsfmt = require("../src/index");
-import ts = require("typescript");
 import VinylFile = require("vinyl");
 
 var assert = chai.assert;
@@ -13,28 +12,49 @@ describe("gulp-tsfmt", () => {
             tsfmt();
         });
 
-        it("should handle options", () => {
-            tsfmt({
-                options: {
-                    IndentSize: 4,
-                    TabSize: 4,
-                    NewLineCharacter: "\r\n",
-                    ConvertTabsToSpaces: true,
-                    InsertSpaceAfterCommaDelimiter: true,
-                    InsertSpaceAfterSemicolonInForStatements: true,
-                    InsertSpaceBeforeAndAfterBinaryOperators: true,
-                    InsertSpaceAfterKeywordsInControlFlowStatements: true,
-                    InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                    InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                    PlaceOpenBraceOnNewLineForFunctions: false,
-                    PlaceOpenBraceOnNewLineForControlBlocks: false
-                }
+        describe("options", () => {
+            it("should handle options", () => {
+                tsfmt({
+                    options: {
+                        IndentSize: 4,
+                        TabSize: 4,
+                        NewLineCharacter: "\r\n",
+                        ConvertTabsToSpaces: true,
+                        InsertSpaceAfterCommaDelimiter: true,
+                        InsertSpaceAfterSemicolonInForStatements: true,
+                        InsertSpaceBeforeAndAfterBinaryOperators: true,
+                        InsertSpaceAfterKeywordsInControlFlowStatements: true,
+                        InsertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+                        InsertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+                        PlaceOpenBraceOnNewLineForFunctions: false,
+                        PlaceOpenBraceOnNewLineForControlBlocks: false
+                    }
+                });
+            });
+
+            it("should handle some options", () => {
+                tsfmt({
+                    options: {
+                        IndentSize: 2,
+                        TabSize: 2
+                    }
+                });
             });
         });
 
-        it("should handle target", () => {
-            tsfmt({
-                target: ts.ScriptTarget.ES6
+        describe("target", () => {
+            it("should handle target", () => {
+                tsfmt({
+                    target: "ES6"
+                });
+            });
+
+            it("should throw an error for an invalid target", () => {
+                assert.throws(() => {
+                    tsfmt({
+                        target: "Fail"
+                    });
+                }, "Fail is not a valid script target");
             });
         });
     });
