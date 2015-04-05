@@ -1,11 +1,21 @@
 after_success:
 - npm run coverage
+before_deploy:
+- npm run bundle
 before_script:
 - npm run typings
 cache:
   directories:
   - node_modules
   - typings
+deploy:
+  provider: npm
+  email: pspeter333@gmail.com
+  api_key:
+    secure: lJVHoQ5WKYroJICZYUmd960wSudH6qbIlgm3WK111UJ91kKMsZBYKSv8CWA2HcGbzVIiAqsFfG1mkLORueT1lfvqqMa34CE+281JVMNDMozdG1dzMyh37L+qkR7aX360vtvJHL6ZrWtamJ1euDcYw0yAcc1mfCv9C/zoS1F9iLY=
+  on:
+    tags: true
+    repo: pspeter3/gulp-tsfmt
 language: node_js
 node_js:
 - '0.12'
