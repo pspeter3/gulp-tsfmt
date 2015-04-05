@@ -92,7 +92,7 @@
     ],
     "use-strict": false,
     "variable-name": [
-      true,
+      false,
       "allow-leading-underscore"
     ],
     "whitespace": [
