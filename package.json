@@ -50,5 +50,8 @@
     "gulp-util": "^3.0.4",
     "through2": "^0.6.3",
     "typescript": "^1.4.1"
+  },
+  "typescript": {
+    "definition": "gulp-tsfmt.d.ts"
   }
 }
