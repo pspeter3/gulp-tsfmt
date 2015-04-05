@@ -5,7 +5,7 @@
   "main": "index.js",
   "files": [
     "index.js",
-    "index.d.ts",
+    "gulp-tsfmt.d.ts",
     "README.md",
     "package.json"
   ],

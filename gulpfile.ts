@@ -40,7 +40,8 @@ register(Task.bundle, [Task.copy], () => {
     dts.bundle({
         main: "index.d.ts",
         name: "gulp-tsfmt",
-        prefix: ""
+        prefix: "",
+        removeSource: true
     });
 });
 
