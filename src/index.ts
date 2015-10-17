@@ -53,8 +53,8 @@ class Transformer {
 
     private _applyEdits(file: VinylFile, edits: ts.TextChange[]): Buffer {
         return edits.reduceRight((contents, edit) => {
-            var head = contents.slice(0, edit.span.start());
-            var tail = contents.slice(edit.span.start() + edit.span.length());
+            var head = contents.slice(0, edit.span.start);
+            var tail = contents.slice(edit.span.start + edit.span.length);
             var change = new Buffer(edit.newText, "utf8");
             return Buffer.concat([head, change, tail]);
         }, file.contents);
