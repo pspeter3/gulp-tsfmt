@@ -50,11 +50,12 @@ describe("gulp-tsfmt", () => {
             });
 
             it("should throw an error for an invalid target", () => {
-                assert.throws(() => {
+                const fn = () => {
                     tsfmt({
                         target: "Fail"
                     });
-                }, "Fail is not a valid script target");
+                };
+                assert.throws(fn, "Fail is not a valid script target");
             });
         });
     });
